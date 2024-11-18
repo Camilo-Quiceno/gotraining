@@ -1,3 +1,5 @@
+---
+
 # About This Project
 
 Due to work requirements, I needed to learn recursion in Go. During this process, I searched for basic and practical exercises that would help me practice and apply the concepts I was learning. However, after spending some time searching online, I couldn't find anything that suited my needs. As a result, I decided to create my own set of exercises with the help of GitHub Copilot.
@@ -660,3 +662,71 @@ lines := []string{
 - **Channel Closing:** Properly close channels from the sending side once all data has been sent to avoid deadlocks in receiving goroutines.
 - **Synchronization:** Use synchronization techniques, such as `sync.WaitGroup`, if necessary, to ensure the main function waits for all goroutines to finish processing before exiting.
 - **Extensibility:** This basic pipeline can be extended by adding more processing stages, such as logging, writing to a file, or performing additional transformations.
+
+## 4. frequency_counter_fan_out
+
+### **Objective:**
+
+Build a Go program that counts the frequency of words in a predefined list of sentences using the fan-out concurrency pattern. The program should distribute the task of processing each sentence to multiple worker goroutines, aggregate the results, and display the word frequencies. This exercise will help you understand how to implement the fan-out pattern to efficiently handle concurrent tasks in Go.
+
+### **Requirements:**
+
+1. **Predefined Sentences:**
+    - Use a predefined slice of strings containing multiple sentences. For example:
+        
+        ```go
+        sentences := []string{
+            "Concurrency in Go is powerful",
+            "Goroutines simplify concurrent programming",
+            "Channels enable communication between goroutines",
+            "Synchronization is crucial for avoiding race conditions",
+            "Fan-out pattern distributes tasks to multiple workers",
+        }
+        ```
+        
+2. **Task Distribution with Fan-Out:**
+    - Implement a worker pool where multiple goroutines (workers) concurrently receive sentences from a jobs channel.
+    - Each worker should process the received sentence by splitting it into words and counting the frequency of each word.
+3. **Aggregation of Results:**
+    - Collect the word counts from all workers and aggregate them into a single map that holds the total frequency of each word across all sentences.
+4. **Result Display:**
+    - After processing all sentences, print the word frequencies to the console in a readable format.
+5. **Concurrency Control:**
+    - Make the number of worker goroutines configurable (e.g., via a constant or command-line argument).
+6. **Error Handling:**
+    - Ensure proper handling of any potential errors during sentence processing. Log errors without terminating the program.
+
+### **Expected Console Output:**
+
+Given the predefined sentences, the expected console output should display the frequency of each word:
+
+```bash
+Concurrency: 1
+in: 1
+Go: 1
+is: 1
+powerful: 1
+Goroutines: 1
+simplify: 1
+concurrent: 1
+programming: 1
+Channels: 1
+enable: 1
+communication: 1
+between: 1
+goroutines: 1
+Synchronization: 1
+is: 1
+crucial: 1
+for: 1
+avoiding: 1
+race: 1
+conditions: 1
+Fan-out: 1
+pattern: 1
+distributes: 1
+tasks: 1
+to: 1
+multiple: 1
+workers: 1
+```
