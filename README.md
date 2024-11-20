@@ -730,3 +730,103 @@ to: 1
 multiple: 1
 workers: 1
 ```
+
+## aggregation_fan_in
+
+### **Objective:**
+
+Create a Go program that aggregates data from multiple concurrent sources using the fan-in concurrency pattern. The program will simulate multiple data producers generating data concurrently and a single aggregator that collects and processes the incoming data streams. This exercise will help you understand how to merge multiple channels into one, enabling efficient data aggregation in concurrent applications.
+
+### **Requirements:**
+
+1. **Data Producers:**
+    - Implement multiple goroutines (e.g., 3) that act as data producers.
+    - Each producer should generate a series of integers (e.g., from 1 to 10) with a slight delay between each number to simulate work.
+2. **Fan-In Function:**
+    - Create a fan-in function that takes multiple input channels from the producers and merges them into a single output channel.
+    - Ensure that the merged channel correctly receives all data from the producers without missing or duplicating any values.
+3. **Aggregator:**
+    - Implement a single goroutine that reads from the merged output channel.
+    - The aggregator should calculate the sum of all received integers and print the final result once all data has been processed.
+4. **Synchronization:**
+    - Use `sync.WaitGroup` or other synchronization mechanisms to ensure that the main function waits for all producers and the aggregator to finish before exiting the program.
+    - Properly close channels to signal the completion of data streams and prevent deadlocks.
+5. **Concurrency Control:**
+    - Make the number of producers and the range of generated integers configurable via constants or command-line arguments.
+6. **Error Handling:**
+    - Ensure the program handles any potential errors gracefully, such as issues with channel operations.
+
+### **Expected Console Output:**
+
+Assuming there are 3 producers each generating integers from 1 to 10, the expected console output should display the total sum of all generated integers.
+
+```bash
+Total Sum: 165
+```
+
+## cancelling_go_routines
+
+### **Objective:**
+
+Create a Go program that launches multiple worker goroutines to process tasks and implements a mechanism to cancel these goroutines gracefully using `select` statements and channels, without utilizing the `context` package. This exercise will help you understand how to manage goroutine lifecycles and implement cancellation patterns using channels and `select`.
+
+### **Requirements:**
+
+1. **Predefined Tasks:**
+    - Use a predefined slice of strings representing tasks. For example:
+        
+        tasks := []string{
+        
+        "Task 1: Data Processing",
+        
+        "Task 2: File Download",
+        
+        "Task 3: Image Rendering",
+        
+        "Task 4: Report Generation",
+        
+        "Task 5: Email Sending",
+        
+        }
+        
+2. **Worker Goroutines:**
+    - Implement a worker function that takes a `tasks` channel and a `done` channel.
+    - Each worker should:
+        - Receive tasks from the `tasks` channel.
+        - Simulate task processing by sleeping for a random duration between 1 to 5 seconds.
+        - Periodically check the `done` channel using a `select` statement to handle cancellation.
+        - Log a message when starting, completing, or cancelling a task.
+3. **Cancellation Mechanism:**
+    - In the `main` function:
+        - Create a `tasks` channel to send tasks to workers.
+        - Create a `done` channel to signal cancellation.
+        - Launch a configurable number of worker goroutines.
+        - Send all predefined tasks to the `tasks` channel.
+        - Implement a timeout using `time.After` that triggers cancellation after a specified duration (e.g., 3 seconds).
+        - Close the `tasks` channel after sending all tasks.
+4. **Synchronization:**
+    - Use a `sync.WaitGroup` to ensure the main function waits for all workers to finish before exiting.
+    - Ensure that all goroutines handle cancellation properly to prevent hanging.
+5. **Logging:**
+    - Log messages to the console to indicate when a task starts, completes, or is cancelled
+6. **Concurrency Control:**
+    - Make the number of worker goroutines configurable via a constant or command-line argument.
+
+### **Expected Console Output:**
+
+Assuming a timeout of 3 seconds, the console output might look like the following:
+
+```bash
+Starting Task 1: Data Processing
+Starting Task 2: File Download
+Starting Task 3: Image Rendering
+Starting Task 4: Report Generation
+Starting Task 5: Email Sending
+Task 2: File Download completed.
+Task 5: Email Sending completed.
+Task 1: Data Processing was cancelled.
+Task 3: Image Rendering was cancelled.
+Task 4: Report Generation was cancelled.
+Total tasks completed: 2
+Total tasks cancelled: 3
+```
